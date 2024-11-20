@@ -9,6 +9,8 @@ import (
 var (
 	appNameStyle = lipgloss.NewStyle().Background(lipgloss.Color("99")).Padding(0, 1)
 
+	warningStyle = lipgloss.NewStyle().Background(lipgloss.Color("9")).Padding(0, 1)
+
 	faint = lipgloss.NewStyle().Foreground(lipgloss.Color("255")).Faint(true)
 
 	redStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Faint(true)
@@ -36,7 +38,9 @@ func (m model) View() string {
 	}
 
 	if m.state == deleteView {
-		s += "Note:\n\n"
+		s += warningStyle.Render("Are you sure you want to delete this note?:")
+		s += "\n\n"
+		s += "Note: " + m.currNote.Title + "\n\n"
 		s += m.textarea.View() + "\n\n"
 		s += redStyle.Render("y - delete")
 		s += faint.Render(", esc - discard")
@@ -55,6 +59,7 @@ func (m model) View() string {
 			s += enumeratorStyle.Render(prefix) + n.Title + " | " + faint.Render(shortBody) + "\n\n"
 		}
 		s += greenStyle.Render("n - new")
+		s += redStyle.Render(", ctrl+d - delete")
 		s += faint.Render(", q - quit")
 	}
 	return s
